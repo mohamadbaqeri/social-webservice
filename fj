@@ -1,0 +1,93 @@
+warning: LF will be replaced by CRLF in app/Http/Controllers/Api/V1/Auth/AuthController.php.
+The file will have its original line endings in your working directory
+warning: LF will be replaced by CRLF in routes/api.php.
+The file will have its original line endings in your working directory
+[1mdiff --git a/app/Http/Controllers/Api/V1/Auth/AuthController.php b/app/Http/Controllers/Api/V1/Auth/AuthController.php[m
+[1mindex 9c6ecfd..b086734 100644[m
+[1m--- a/app/Http/Controllers/Api/V1/Auth/AuthController.php[m
+[1m+++ b/app/Http/Controllers/Api/V1/Auth/AuthController.php[m
+[36m@@ -51,28 +51,37 @@[m [mpublic function register(Request $request)[m
+             'message' => 'successful your request!'[m
+         ]);[m
+     }[m
+[31m- //    *****************************************************[m
+[31m-[m
+[31m-//    public function update(Request $request,$id)[m
+[31m-//    {[m
+[31m-//        $user = User::findOrFail($id);[m
+[31m-//[m
+[31m-//        $file = $request->file('avatar');[m
+[31m-//        $image = '';[m
+[31m-//        if (!empty($file)){[m
+[31m-//            $image=time().'.'.$file->getClientOriginalExtension();[m
+[31m-//        }[m
+[31m-//        $user->update([[m
+[31m-//            'avatar'=>$image,[m
+[31m-//            'firstname'=>$request->firstname,[m
+[31m-//            'lastname'=>$request->lastname,[m
+[31m-//            'about'=>$request->about,[m
+[31m-//            'username'=>$request->username,[m
+[31m-//            'phone'=>$request->phone,[m
+[31m-//            'email'=>$request->email,[m
+[31m-//            'password'=>$request->password[m
+[31m-//        ]);[m
+[31m-//    }[m
+[32m+[m
+[32m+[m[32m    //    *****************************************************[m
+[32m+[m
+[32m+[m[32m    public function update(Request $request)[m
+[32m+[m[32m    {[m
+[32m+[m
+[32m+[m[32m        $validator = $request->validate([[m
+[32m+[m[32m            'firstname'=>'required|max:50',[m
+[32m+[m[32m            'lastname'=>'required',[m
+[32m+[m[32m            'about'=>'required',[m
+[32m+[m
+[32m+[m[32m        ])[m
+[32m+[m
+[32m+[m
+[32m+[m[32m        $file = $request->file('avatar');[m
+[32m+[m[32m        $image = '';[m
+[32m+[m[32m        if (!empty($file)) {[m
+[32m+[m[32m            $image = time() . '.' . $file->getClientOriginalExtension();[m
+[32m+[m[32m        }[m
+[32m+[m[32m        User::update([[m
+[32m+[m[32m            'avatar' => $image,[m
+[32m+[m[32m            'firstname' => $request->firstname,[m
+[32m+[m[32m            'lastname' => $request->lastname,[m
+[32m+[m[32m            'about' => $request->about,[m
+[32m+[m[32m            'username' => $request->username,[m
+[32m+[m[32m            'phone' => $request->phone,[m
+[32m+[m[32m            'email' => $request->email,[m
+[32m+[m[32m            'password' => $request->password[m
+[32m+[m[32m        ]);[m
+[32m+[m[32m        session()->flash('update', 'hello');[m
+[32m+[m[32m    }[m
+ [m
+     /*[m
+      *[m
+[36m@@ -99,9 +108,9 @@[m [mpublic function login(Request $request)[m
+                 'message' => 'email or password is incorrect!'[m
+             ], 422);[m
+         } else {[m
+[31m-             $user->createToken('new_user', ['user:view'])->plainTextToken;[m
+[32m+[m[32m            $user->createToken('new_user', ['user:view'])->plainTextToken;[m
+         }[m
+[31m-        return redirect()->route('panel.user');[m
+[32m+[m[32m//        return redirect()->route('panel.user');[m
+     }[m
+ [m
+ [m
+[1mdiff --git a/routes/api.php b/routes/api.php[m
+[1mindex 709b0b2..6692747 100644[m
+[1m--- a/routes/api.php[m
+[1m+++ b/routes/api.php[m
+[36m@@ -23,7 +23,7 @@[m
+ [m
+ Route::prefix('/v1/auth')->group(callback: function () {[m
+     Route::post('/register', [\App\Http\Controllers\Api\V1\Auth\AuthController::class, 'register']);[m
+[31m-//    Route::post('/user/update',[\App\Http\Controllers\Api\V1\Auth\AuthController::class,'update'])->name('panel.user');[m
+[32m+[m[32m    Route::put('/update',[\App\Http\Controllers\Api\V1\Auth\AuthController::class,'update'])->name('panel.user');[m
+     Route::post('/login', [\App\Http\Controllers\Api\V1\Auth\AuthController::class, 'login'])->middleware('throttle:login');[m
+     Route::post('/logout', [\App\Http\Controllers\Api\V1\Auth\AuthController::class, 'logout']);[m
+     Route::get('/user', [\App\Http\Controllers\Api\V1\Auth\AuthController::class, 'getUser'])[m

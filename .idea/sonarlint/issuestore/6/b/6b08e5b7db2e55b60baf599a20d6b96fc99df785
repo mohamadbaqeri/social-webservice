@@ -1,0 +1,4 @@
+
+P	php:S1142F"<This method has 4 returns, which is more than the 3 allowed.(¿£¦f
+h	php:S3776F"TRefactor this function to reduce its Cognitive Complexity from 17 to the 15 allowed.(¿£¦f
+I	php:S1481"/Remove this unused "$validator" local variable.(ƒ¦Õïûÿÿÿÿ
